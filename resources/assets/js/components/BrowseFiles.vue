@@ -50,62 +50,68 @@
 
 <script>
 export default {
-  computed: {
-    files() {
-      return this.$store.state.imagesList;
-    },
-  },
-
-  data() {
-    return {
-      viewer: {
-        show: false,
-        path: null,
-        width: null,
-        height: null,
-      },
-    };
-  },
-
-  methods: {
-    getPath(file) {
-      return "/images/" + file.name;
-    },
-
-    onDelete(file) {
-      axios.post("/api/delete/" + file.id).then(response => {
-        this.showInfo("File was successfuly deleted!");
-
-        let id = this.files.findIndex(item => {
-          return item.id === file.id;
-        });
-
-        if (id > -1) {
-          this.files.splice(id, 1);
+    created() {
+        if (!this.$store.state.Auth.login) {
+            this.$router.push("/login");
         }
-      });
     },
 
-    calcSize(size) {
-      return Math.round(size / 1024);
+    computed: {
+        files() {
+            return this.$store.state.imagesList;
+        }
     },
 
-    humanDate(file) {
-      let dat = new moment(file.created_at);
-
-      return dat.fromNow();
+    data() {
+        return {
+            viewer: {
+                show: false,
+                path: null,
+                width: null,
+                height: null
+            }
+        };
     },
 
-    onClickImage(file) {
-      this.viewer.path = "/images/" + file.name;
-      this.viewer.width = file.width;
-      this.viewer.height = file.height;
-      this.viewer.show = true;
-    },
+    methods: {
+        getPath(file) {
+            return "/images/" + file.name;
+        },
 
-    showInfo(message) {
-      this.$store.commit("showInfo", message);
-    },
-  },
+        onDelete(file) {
+            axios.post("/api/delete/" + file.id).then(response => {
+                this.showInfo("File was successfuly deleted!");
+
+                let id = this.files.findIndex(item => {
+                    return item.id === file.id;
+                });
+
+                if (id > -1) {
+                    this.files.splice(id, 1);
+                }
+            });
+        },
+
+        calcSize(size) {
+            return Math.round(size / 1024);
+        },
+
+        humanDate(file) {
+            let dat = new moment(file.created_at);
+
+            return dat.fromNow();
+        },
+
+        onClickImage(file) {
+            this.viewer.path = "/images/" + file.name;
+            this.viewer.width = file.width;
+            this.viewer.height = file.height;
+            this.viewer.show = true;
+        },
+
+        showInfo(message) {
+            this.$store.commit("showInfo", message);
+        }
+    }
 };
 </script>

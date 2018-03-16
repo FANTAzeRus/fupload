@@ -25,79 +25,87 @@
 
 <script>
 export default {
-  computed: {
-    readyToUpload() {
-      return this.formData.displayFileName && this.formData.uploadFileData;
-    }
-  },
-
-  data() {
-    return {
-      formData: {
-        displayFileName: null,
-        uploadFileData: null,
-        file: null
-      }
-    }
-  },
-
-  methods: {
-    onFileChange( event ) {
-      if(event.target.files && event.target.files.length) {
-        let file = event.target.files[0];
-        this.formData.file = file;
-        this.formData.displayFileName = event.target.files[0].name + ' ('+this.calcSize( file.size )+'Kb)';
-
-        let reader = new FileReader();
-        reader.onload = e => {
-          this.formData.uploadFileData = e.target.result;
+    created() {
+        if (!this.$store.state.Auth.login) {
+            this.$router.push("/login");
         }
-        reader.readAsDataURL(file);
-      }
     },
 
-    onButtonClick() {
-      this.$refs.fupload.click();
+    computed: {
+        readyToUpload() {
+            return (
+                this.formData.displayFileName && this.formData.uploadFileData
+            );
+        }
     },
 
-    calcSize( size ) {
-      return Math.round(size/1024);
+    data() {
+        return {
+            formData: {
+                displayFileName: null,
+                uploadFileData: null,
+                file: null
+            }
+        };
     },
 
-    uploadImage() {
-      let data = new FormData();
-      data.append('fupload', this.formData.file);
+    methods: {
+        onFileChange(event) {
+            if (event.target.files && event.target.files.length) {
+                let file = event.target.files[0];
+                this.formData.file = file;
+                this.formData.displayFileName =
+                    event.target.files[0].name +
+                    " (" +
+                    this.calcSize(file.size) +
+                    "Kb)";
 
-      axios.post('/api/upload_file', data)
-        .then( response => {
+                let reader = new FileReader();
+                reader.onload = e => {
+                    this.formData.uploadFileData = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        },
 
-          this.showInfo('File was successfuly uploaded!');
-          this.formData = {
-            displayFileName: null,
-            uploadFileData: null,
-            file: null
-          }
-          
-        })
-    },
+        onButtonClick() {
+            this.$refs.fupload.click();
+        },
 
-    showInfo( message ) {
-      this.$store.commit('showInfo', message)
+        calcSize(size) {
+            return Math.round(size / 1024);
+        },
+
+        uploadImage() {
+            let data = new FormData();
+            data.append("fupload", this.formData.file);
+
+            axios.post("/api/upload_file", data).then(response => {
+                this.showInfo("File was successfuly uploaded!");
+                this.formData = {
+                    displayFileName: null,
+                    uploadFileData: null,
+                    file: null
+                };
+            });
+        },
+
+        showInfo(message) {
+            this.$store.commit("showInfo", message);
+        }
     }
-  }
-}
+};
 </script>
 
 <style>
-  .input-field-file {
+.input-field-file {
     display: none;
-  }
+}
 
-  .preview-image {
+.preview-image {
     width: 250px;
     padding: 15px;
     border: 1px solid #999;
     border-radius: 5px;
-  }
+}
 </style>
-

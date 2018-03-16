@@ -23,20 +23,26 @@
 
 <script>
 export default {
-  computed: {
-    items() {
-      return this.$store.state.imagesList;
+    created() {
+        if (!this.$store.state.Auth.login) {
+            this.$router.push("/login");
+        }
     },
 
-    isLoaded() {
-      return this.items.length;
-    },
-  },
+    computed: {
+        items() {
+            return this.$store.state.imagesList;
+        },
 
-  methods: {
-    getPath(file) {
-      return "/images/" + file.name;
+        isLoaded() {
+            return this.items.length;
+        }
     },
-  },
+
+    methods: {
+        getPath(file) {
+            return "/images/" + file.name;
+        }
+    }
 };
 </script>
