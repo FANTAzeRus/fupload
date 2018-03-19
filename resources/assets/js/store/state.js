@@ -19,12 +19,16 @@ export default {
         { path: "/login", title: "Login", auth: false }
     ],
 
-    profileNav: [{ path: "/logout", title: "Logout", auth: true }],
+    profileNav: [
+        { path: "/profile", title: "Profile", auth: true },
+        { path: "/logout", title: "Logout", auth: true }
+    ],
 
     Auth: {
         login: false,
         user_id: null,
         api_token: null,
-        name: null
+        name: null,
+        photo: null
     }
 };

@@ -21,6 +21,10 @@
                 v-if="item.auth === auth.login"
             >{{ item.title }}</v-btn>
 
+            <v-avatar size="55" v-if="auth.login">
+                <img :src="profileImage">
+            </v-avatar>
+
             <v-menu offset-y v-if="auth.login">
                 <v-btn flat slot="activator">
                     {{ auth.name }}
@@ -67,6 +71,10 @@ export default {
         ...mapState(["info", "nav", "authNav", "profileNav"]),
         auth() {
             return this.$store.state.Auth;
+        },
+
+        profileImage() {
+            return this.$store.state.Auth.photo;
         }
     },
 
@@ -84,12 +92,9 @@ export default {
                 return true;
             }
 
-            axios.defaults.headers.common["Authorization"] =
-                "Bearer " + this.auth.api_token;
             axios.post("/api/logout").then(response => {
                 if (response.data.success) {
                     Auth.logout();
-                    Auth.init();
                     this.$router.push("/");
                 }
             });

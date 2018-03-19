@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'api_token'
+        'name', 'email', 'password', 'api_token', 'photo'
     ];
 
     /**
@@ -24,6 +24,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'api_token'
     ];
+
+    public function info() {
+        return [
+            'user_id' => $this->id,
+            'api_token' => $this->api_token,
+            'name' => $this->name,
+            'photo' => $this->photo
+        ];
+    }
 }

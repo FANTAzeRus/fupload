@@ -9,3 +9,6 @@ Route::post('/delete/{file}', 'FilesController@delete');
 Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');
 Route::post('/logout', 'AuthController@logout');
+
+Route::post('/edit_profile', 'AuthController@editProfile');
+Route::post('/update_profile', 'AuthController@updateProfile');

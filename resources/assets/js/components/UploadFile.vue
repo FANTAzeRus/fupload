@@ -24,11 +24,10 @@
 </template>
 
 <script>
+import Auth from "../helpers/Auth";
 export default {
     created() {
-        if (!this.$store.state.Auth.login) {
-            this.$router.push("/login");
-        }
+        Auth.check();
     },
 
     computed: {

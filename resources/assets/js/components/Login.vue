@@ -5,7 +5,7 @@
               <v-flex sm4 offset-sm4>
                   <v-card>
                       <v-card-title>
-                          <h2>Create An Account</h2>
+                          <h2>Welcome back</h2>
                       </v-card-title>
 
                       <v-card-text>
@@ -64,8 +64,7 @@ export default {
                 .post("/api/login", this.form)
                 .then(response => {
                     if (response.data.success) {
-                        Auth.login(response.data);
-                        Auth.init();
+                        Auth.login(response.data.user);
                         this.$router.push("/");
                     }
                 })
